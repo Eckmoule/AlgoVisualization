@@ -20,6 +20,7 @@ export default class SortingVisualizer extends React.Component {
     }
 
     resetArray() {
+        console.log("reset array");
         const array = [];
 
         const maxBarHeight = window.innerHeight - 80;
@@ -33,24 +34,24 @@ export default class SortingVisualizer extends React.Component {
 
     mergeSort() {
         const animations = sortingAlgoHelper.getMergeSortAnimations(this.state.array);
-        for (let i = 0; i < animations.lenght; i++) {
+        for (let i = 0; i < animations.length; i++) {
             const arrayBars = document.getElementsByClassName('array-bar'); // Can we move that out of the loop ? 
             const isColorChange = i % 3 !== 2;
             if (isColorChange) {
                 const [barOneIdx, barTwoIdx] = animations[i];
                 const barOneStyle = arrayBars[barOneIdx].style;
                 const barTwoStyle = arrayBars[barTwoIdx].style;
-                const color = i % 3 === 0 ? 'turquoise' : 'darkcyan';
+                const color = i % 3 === 0 ? 'Navy' : 'Orchid';
                 setTimeout(() => {
                     barOneStyle.backgroundColor = color;
                     barTwoStyle.backgroundColor = color;
-                }, i * 5); // 5 is the animation speed that need to be adjust dynamically based on the number of bars (size of the screen)
+                }, i * 10); // 5 is the animation speed that need to be adjust dynamically based on the number of bars (size of the screen)
             } else {
                 setTimeout(() => {
                     const [barOneIdx, newHeight] = animations[i];
                     const barOneStyle = arrayBars[barOneIdx].style;
                     barOneStyle.height = `${newHeight}px`;
-                }, i * 5);
+                }, i * 10);
             }
         }
     }

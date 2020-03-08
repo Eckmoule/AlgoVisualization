@@ -56,12 +56,12 @@ function doMerge(mainArray, startIdx, middleIdx, endIdx, auxiliaryArray, animati
         animations.push([i, j]);
         if (auxiliaryArray[i] <= auxiliaryArray[j]) {
             // Overwrite the value at k in the origial array with the value at index i in the auxiliary array.
-            animations.push(k, auxiliaryArray[i])
-            mainArray[k++] = auxiliaryArray[i++]
+            animations.push([k, auxiliaryArray[i]]);
+            mainArray[k++] = auxiliaryArray[i++];
         } else {
             // Overwrite the value at k in the origial array with the value at index j in the auxiliary array.
-            animations.push(k, auxiliaryArray[j])
-            mainArray[k++] = auxiliaryArray[j++]
+            animations.push([k, auxiliaryArray[j]]);
+            mainArray[k++] = auxiliaryArray[j++];
         }
     }
 
@@ -71,8 +71,8 @@ function doMerge(mainArray, startIdx, middleIdx, endIdx, auxiliaryArray, animati
         // Comparison back to normal color 
         animations.push([i, i]);
         // Overwrite value at k 
-        animations.push(k, auxiliaryArray[i])
-        mainArray[k++] = auxiliaryArray[i++]
+        animations.push([k, auxiliaryArray[i]]);
+        mainArray[k++] = auxiliaryArray[i++];
     }
     while (j <= endIdx) {
         // Comparison change color
@@ -80,8 +80,8 @@ function doMerge(mainArray, startIdx, middleIdx, endIdx, auxiliaryArray, animati
         // Comparison back to normal color 
         animations.push([j, j]);
         // Overwrite value at k 
-        animations.push(k, auxiliaryArray[j])
-        mainArray[k++] = auxiliaryArray[j++]
+        animations.push([k, auxiliaryArray[j]]);
+        mainArray[k++] = auxiliaryArray[j++];
     }
 
 }
