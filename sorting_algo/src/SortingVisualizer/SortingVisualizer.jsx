@@ -1,9 +1,16 @@
+// This is from Clément Mihailescu: https://www.youtube.com/watch?v=pFXYym4Wbkc&t=317s
+
 import React from 'react';
 import './SortingVisualizer.css';
 import * as sortingAlgoHelper from './Helpers/SortingAlgoHelper';
 import * as testHelper from './Helpers/TestHelper';
 
-// This is from Clément Mihailescu: https://www.youtube.com/watch?v=pFXYym4Wbkc&t=317s
+// Time between each animation 
+const ANIMATION_SPEED_MS = 3;
+// CSS Color of the bars
+const BAR_COLOR = "Orchid";
+// CSS color to use when womparing two bars
+const COMPARISON_COLOR = "Navy";
 
 export default class SortingVisualizer extends React.Component {
 
@@ -20,7 +27,6 @@ export default class SortingVisualizer extends React.Component {
     }
 
     resetArray() {
-        console.log("reset array");
         const array = [];
 
         const maxBarHeight = window.innerHeight - 80;
@@ -29,11 +35,12 @@ export default class SortingVisualizer extends React.Component {
         for (let i = 0; i < numberOfBars; i++) {
             array.push(randomIntFromInterval(5, maxBarHeight));
         }
-        this.setState({ array });
+        this.setState({ array: array, });
     }
 
     mergeSort() {
         const animations = sortingAlgoHelper.getMergeSortAnimations(this.state.array);
+
         for (let i = 0; i < animations.length; i++) {
             const arrayBars = document.getElementsByClassName('array-bar'); // Can we move that out of the loop ? 
             const isColorChange = i % 3 !== 2;
@@ -41,23 +48,53 @@ export default class SortingVisualizer extends React.Component {
                 const [barOneIdx, barTwoIdx] = animations[i];
                 const barOneStyle = arrayBars[barOneIdx].style;
                 const barTwoStyle = arrayBars[barTwoIdx].style;
-                const color = i % 3 === 0 ? 'Navy' : 'Orchid';
+                const color = i % 3 === 0 ? COMPARISON_COLOR : BAR_COLOR;
                 setTimeout(() => {
                     barOneStyle.backgroundColor = color;
                     barTwoStyle.backgroundColor = color;
-                }, i * 10); // 5 is the animation speed that need to be adjust dynamically based on the number of bars (size of the screen)
+                }, i * ANIMATION_SPEED_MS);
             } else {
                 setTimeout(() => {
                     const [barOneIdx, newHeight] = animations[i];
                     const barOneStyle = arrayBars[barOneIdx].style;
                     barOneStyle.height = `${newHeight}px`;
-                }, i * 10);
+                }, i * ANIMATION_SPEED_MS);
             }
         }
     }
 
     bubbleSort() {
+        const animations = sortingAlgoHelper.getBubbleSortAnimations(this.state.array);
 
+        console.log(animations);
+
+        for (let i = 0; i < animations.length; i++) {
+
+            const arrayBars = document.getElementsByClassName('array-bar');
+            const isColorChange = i % 3 !== 2;
+            if (isColorChange) {
+
+                const [barOneIdx, barTwoIdx] = animations[i];
+                const barOneStyle = arrayBars[barOneIdx].style;
+                const barTwoStyle = arrayBars[barTwoIdx].style;
+                const color = i % 3 === 0 ? COMPARISON_COLOR : BAR_COLOR;
+                setTimeout(() => {
+                    barOneStyle.backgroundColor = color;
+                    barTwoStyle.backgroundColor = color;
+                }, i * ANIMATION_SPEED_MS);
+            }
+            else {
+                const [barOneIdx, barTwoIdx] = animations[i - 1];
+                const [barTwoNewHeight, barOneNewHeight] = animations[i];
+                const barOneStyle = arrayBars[barOneIdx].style;
+                const barTwoStyle = arrayBars[barTwoIdx].style;
+                setTimeout(() => {
+                    barOneStyle.height = `${barOneNewHeight}px`;
+                    barTwoStyle.height = `${barTwoNewHeight}px`;
+                }, i * ANIMATION_SPEED_MS);
+            }
+
+        }
     }
 
     heapSort() {
@@ -80,8 +117,10 @@ export default class SortingVisualizer extends React.Component {
 
             const javaScriptSortedArray = array.slice().sort((a, b) => a - b);
             const mergeSortedArray = sortingAlgoHelper.mergeSort(array.slice());
+            const bubbleSortedArray = sortingAlgoHelper.bubbleSort(array.slice());
 
-            console.log(testHelper.arraysAreEqual(javaScriptSortedArray, mergeSortedArray));
+            //console.log(testHelper.arraysAreEqual(javaScriptSortedArray, mergeSortedArray));
+            console.log(testHelper.arraysAreEqual(javaScriptSortedArray, bubbleSortedArray));
 
         }
     }

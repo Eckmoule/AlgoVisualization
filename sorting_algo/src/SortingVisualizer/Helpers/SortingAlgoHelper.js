@@ -24,6 +24,7 @@ export const mergeSort = (array) => {
     return sortedArray;
 }
 
+// return the animations tab needed to render the sorting on the screen. 
 export function getMergeSortAnimations(array) {
     const animations = [];
     if (array.length <= 1) return array; //animations ? 
@@ -83,5 +84,54 @@ function doMerge(mainArray, startIdx, middleIdx, endIdx, auxiliaryArray, animati
         animations.push([k, auxiliaryArray[j]]);
         mainArray[k++] = auxiliaryArray[j++];
     }
+}
 
+export const bubbleSort = (array) => {
+
+    var tempValue = 0;
+    var swapped = false;
+    const arrayLength = array.length;
+
+    for (let i = 0; i < arrayLength; i++) {
+        swapped = false;
+        for (let j = 0; j < arrayLength - i - 1; j++) {
+            if (array[j] > array[j + 1]) {
+                tempValue = array[j];
+                array[j] = array[j + 1];
+                array[j + 1] = tempValue;
+                swapped = true;
+            }
+        }
+
+        if (!swapped) break; // TO optimize if no elements were swapped everithing is already ordered
+    }
+
+    return array;
+}
+
+export function getBubbleSortAnimations(array) {
+    const animations = [];
+    var tempValue = 0;
+    var swapped = false;
+    const arrayLength = array.length;
+
+    for (let i = 0; i < arrayLength; i++) {
+        swapped = false;
+        for (let j = 0; j < arrayLength - i - 1; j++) {
+            if (array[j] > array[j + 1]) {
+                // Need to see how this animation and timeout work 
+                animations.push([j, j + 1]);
+                animations.push([j, j + 1]);
+                animations.push([array[j], array[j + 1]]);
+                tempValue = array[j];
+                array[j] = array[j + 1];
+                array[j + 1] = tempValue;
+                swapped = true;
+            }
+        }
+
+        if (!swapped) break; // TO optimize if no elements were swapped everithing is already ordered
+    }
+
+    return animations;
 }
