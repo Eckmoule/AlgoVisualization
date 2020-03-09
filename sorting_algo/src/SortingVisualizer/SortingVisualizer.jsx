@@ -3,6 +3,7 @@
 import React from 'react';
 import './SortingVisualizer.css';
 import * as sortingAlgoHelper from './Helpers/SortingAlgoHelper';
+import * as sortingAnimationHelper from './Helpers/SortingAnimationHelper';
 import * as testHelper from './Helpers/TestHelper';
 
 // Time between each animation 
@@ -39,7 +40,7 @@ export default class SortingVisualizer extends React.Component {
     }
 
     mergeSort() {
-        const animations = sortingAlgoHelper.getMergeSortAnimations(this.state.array);
+        const animations = sortingAnimationHelper.getMergeSortAnimations(this.state.array);
 
         for (let i = 0; i < animations.length; i++) {
             const arrayBars = document.getElementsByClassName('array-bar'); // Can we move that out of the loop ? 
@@ -64,9 +65,7 @@ export default class SortingVisualizer extends React.Component {
     }
 
     bubbleSort() {
-        const animations = sortingAlgoHelper.getBubbleSortAnimations(this.state.array);
-
-        console.log(animations);
+        const animations = sortingAnimationHelper.getBubbleSortAnimations(this.state.array);
 
         for (let i = 0; i < animations.length; i++) {
 
@@ -98,7 +97,33 @@ export default class SortingVisualizer extends React.Component {
     }
 
     heapSort() {
+        const animations = sortingAnimationHelper.getHeapSortAnimations(this.state.array);
 
+        var color = BAR_COLOR;
+        for (let i = 0; i < animations.length; i++) {
+
+            const arrayBars = document.getElementsByClassName('array-bar');
+            const isColorChange = animations[i][0];
+            if (isColorChange) {
+                const [isColorChange, barOneIdx, barTwoIdx] = animations[i];
+                const barOneStyle = arrayBars[barOneIdx].style;
+                const barTwoStyle = arrayBars[barTwoIdx].style;
+                color = (color === COMPARISON_COLOR) ? BAR_COLOR : COMPARISON_COLOR;
+                setTimeout(() => {
+                    barOneStyle.backgroundColor = color;
+                    barTwoStyle.backgroundColor = color;
+                }, i * ANIMATION_SPEED_MS);
+            } else {
+                const [isColorChange, barTwoNewHeight, barOneNewHeight, barOneIdx, barTwoIdx] = animations[i];
+                const barOneStyle = arrayBars[barOneIdx].style;
+                const barTwoStyle = arrayBars[barTwoIdx].style;
+                setTimeout(() => {
+                    barOneStyle.height = `${barOneNewHeight}px`;
+                    barTwoStyle.height = `${barTwoNewHeight}px`;
+                }, i * ANIMATION_SPEED_MS);
+            }
+
+        }
     }
 
     quickSort() {
@@ -106,23 +131,28 @@ export default class SortingVisualizer extends React.Component {
     }
 
     testSortingAlgorithms() {
-        for (let i = 0; i < 100; i++) {
-            const array = [];
-            const arrayLength = randomIntFromInterval(1, 1000);
+
+        const array = [10, 4, 15, 2, 45, 3];
 
 
-            for (let i = 0; i < arrayLength; i++) {
-                array.push(randomIntFromInterval(-1000, 1000))
-            }
 
-            const javaScriptSortedArray = array.slice().sort((a, b) => a - b);
-            const mergeSortedArray = sortingAlgoHelper.mergeSort(array.slice());
-            const bubbleSortedArray = sortingAlgoHelper.bubbleSort(array.slice());
+        // for (let i = 0; i < 100; i++) {
+        //     const array = [];
+        //     const arrayLength = randomIntFromInterval(1, 1000);
 
-            //console.log(testHelper.arraysAreEqual(javaScriptSortedArray, mergeSortedArray));
-            console.log(testHelper.arraysAreEqual(javaScriptSortedArray, bubbleSortedArray));
 
-        }
+        //     for (let i = 0; i < arrayLength; i++) {
+        //         array.push(randomIntFromInterval(-1000, 1000))
+        //     }
+
+        //     const javaScriptSortedArray = array.slice().sort((a, b) => a - b);
+        //     const mergeSortedArray = sortingAlgoHelper.mergeSort(array.slice());
+        //     const bubbleSortedArray = sortingAlgoHelper.bubbleSort(array.slice());
+
+        //     //console.log(testHelper.arraysAreEqual(javaScriptSortedArray, mergeSortedArray));
+        //     console.log(testHelper.arraysAreEqual(javaScriptSortedArray, bubbleSortedArray));
+
+        // }
     }
 
     render() {
