@@ -84,3 +84,39 @@ function heapify(array, i, length) {
         heapify(array, largestIdx, length);
     }
 }
+
+export const quickSort = (array) => {
+    quickSortPartition(array, 0, array.length - 1);
+    return array;
+}
+
+function quickSortPartition(array, startIdx, endIdx) {
+    if (startIdx < endIdx) {
+        var pi = quickifyPartition(array, startIdx, endIdx);
+
+        quickSortPartition(array, startIdx, pi - 1);
+        quickSortPartition(array, pi + 1, endIdx)
+    }
+}
+
+function quickifyPartition(array, startIdx, endIdx) {
+
+    var pivot = array[endIdx];
+    var i = startIdx - 1;
+
+    for (let j = startIdx; j < endIdx; j++) {
+
+        if (array[j] < pivot) {
+            i++;
+            var temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+    }
+
+    var temp1 = array[i + 1];
+    array[i + 1] = array[endIdx];
+    array[endIdx] = temp1;
+
+    return i + 1;
+}

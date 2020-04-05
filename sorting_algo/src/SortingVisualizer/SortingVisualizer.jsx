@@ -43,7 +43,7 @@ export default class SortingVisualizer extends React.Component {
         const animations = sortingAnimationHelper.getMergeSortAnimations(this.state.array);
 
         for (let i = 0; i < animations.length; i++) {
-            const arrayBars = document.getElementsByClassName('array-bar'); // Can we move that out of the loop ? 
+            const arrayBars = document.getElementsByClassName('array-bar');
             const isColorChange = i % 3 !== 2;
             if (isColorChange) {
                 const [barOneIdx, barTwoIdx] = animations[i];
@@ -127,32 +127,29 @@ export default class SortingVisualizer extends React.Component {
     }
 
     quickSort() {
-
+        const temp = sortingAlgoHelper.quickSort(this.state.array);
+        this.setState({ array: temp, });
     }
 
     testSortingAlgorithms() {
 
-        const array = [10, 4, 15, 2, 45, 3];
+        for (let i = 0; i < 100; i++) {
+            const array = [];
+            const arrayLength = randomIntFromInterval(1, 1000);
 
 
+            for (let i = 0; i < arrayLength; i++) {
+                array.push(randomIntFromInterval(-1000, 1000))
+            }
 
-        // for (let i = 0; i < 100; i++) {
-        //     const array = [];
-        //     const arrayLength = randomIntFromInterval(1, 1000);
+            const javaScriptSortedArray = array.slice().sort((a, b) => a - b);
+            const mergeSortedArray = sortingAlgoHelper.mergeSort(array.slice());
+            const bubbleSortedArray = sortingAlgoHelper.bubbleSort(array.slice());
 
+            console.log(testHelper.arraysAreEqual(javaScriptSortedArray, mergeSortedArray));
+            console.log(testHelper.arraysAreEqual(javaScriptSortedArray, bubbleSortedArray));
 
-        //     for (let i = 0; i < arrayLength; i++) {
-        //         array.push(randomIntFromInterval(-1000, 1000))
-        //     }
-
-        //     const javaScriptSortedArray = array.slice().sort((a, b) => a - b);
-        //     const mergeSortedArray = sortingAlgoHelper.mergeSort(array.slice());
-        //     const bubbleSortedArray = sortingAlgoHelper.bubbleSort(array.slice());
-
-        //     //console.log(testHelper.arraysAreEqual(javaScriptSortedArray, mergeSortedArray));
-        //     console.log(testHelper.arraysAreEqual(javaScriptSortedArray, bubbleSortedArray));
-
-        // }
+        }
     }
 
     render() {
