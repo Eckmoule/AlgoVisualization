@@ -116,6 +116,7 @@ function heapify(array, i, length, animations) {
 
 
     if (leftIdx < length) {
+        // We are comparing those two values. We push them twice for changing there colors then revert it (two animations)
         animations.push([true, leftIdx, largestIdx]);
         animations.push([true, leftIdx, largestIdx]);
         if (array[leftIdx] > array[largestIdx]) {
@@ -124,6 +125,7 @@ function heapify(array, i, length, animations) {
     }
 
     if (rightIdx < length) {
+        // We are comparing those two values. We push them twice for changing there colors then revert it (two animations)
         animations.push([true, rightIdx, largestIdx]);
         animations.push([true, rightIdx, largestIdx]);
         if (array[rightIdx] > array[largestIdx]) {
@@ -139,4 +141,45 @@ function heapify(array, i, length, animations) {
 
         heapify(array, largestIdx, length, animations);
     }
+}
+
+export function getQuickSortAnimations(array) {
+    const animations = [];
+    quickSortPartition(array, 0, array.length - 1, animations);
+    return animations;
+}
+
+function quickSortPartition(array, startIdx, endIdx, animations) {
+    if (startIdx < endIdx) {
+        var pi = quickifyPartition(array, startIdx, endIdx, animations);
+
+        quickSortPartition(array, startIdx, pi - 1, animations);
+        quickSortPartition(array, pi + 1, endIdx, animations)
+    }
+}
+
+function quickifyPartition(array, startIdx, endIdx, animations) {
+
+    const pivot = array[endIdx];
+    var i = startIdx - 1;
+
+    for (let j = startIdx; j < endIdx; j++) {
+        // We are comparing those two values. We push them twice for changing there colors then revert it (two animations)
+        animations.push([true, j, endIdx]);
+        animations.push([true, j, endIdx]);
+        if (array[j] < pivot) {
+            i++;
+            animations.push([false, array[i], array[j], i, j]);
+            var temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+    }
+
+    animations.push([false, array[i + 1], array[endIdx], i + 1, endIdx]);
+    var temp1 = array[i + 1];
+    array[i + 1] = array[endIdx];
+    array[endIdx] = temp1;
+
+    return i + 1;
 }
